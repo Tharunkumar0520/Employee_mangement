@@ -39,7 +39,7 @@ async function handlechange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectEl
 }
 
 async function handleSubmit() {
-  const response=await axios.post("http://localhost:3000/push-user",{
+  const response=await axios.post("https://employee-mangement-f39u.onrender.com/push-user",{
     name:formData.name,
     employeeId:formData.employeeId,
     email:formData.email,
@@ -53,7 +53,7 @@ async function handleSubmit() {
 }
 
 async function handleSearch() {
-  const response=await axios.get("http://localhost:3000/get-user",{
+  const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
     params:{search:formData.Searchid},
   });
   if(response.data.message!="Employee not found" && response.data.message!="Server error"){
@@ -65,7 +65,7 @@ async function handleSearch() {
 }
 
 async function handleDelete() {
-  const response = await axios.delete("http://localhost:3000/del-user",{
+  const response = await axios.delete("https://employee-mangement-f39u.onrender.com/del-user",{
     params:{delid:formData.deleteID},
   })
   alert(response.data.message);

@@ -4,7 +4,14 @@ import cors from "cors";
 
 const client=new PrismaClient();
 const app=express();
-app.use(cors());
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); // Allow any origin
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specific HTTP methods
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specific headers
+    next();
+  });
+  
 app.use(express.json());
 const port=3000;
 
