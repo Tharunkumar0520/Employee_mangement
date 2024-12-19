@@ -16,7 +16,7 @@ const port=3000;
 
 app.post('/push-user',async (req,res)=>{
     try{
-        const aa=await client.Employee.create({
+        const aa=await client.employee.create({
             data:{
                 name:req.body.name,
                 email:req.body.email,
