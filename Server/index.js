@@ -37,7 +37,7 @@ app.post('/push-user',async (req,res)=>{
 app.get('/get-user', async(req, res)=>{
     const id = req.query.search;   
     try {
-        const employee = await client.employee.findUnique({
+        const employee = await client.Employee.findUnique({
             where: {
                 employeeId: id,
             }
