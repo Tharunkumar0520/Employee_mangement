@@ -204,7 +204,8 @@ async function handleUpdate() {
       alignItems: "center",
     }}>
       <div>
-        <h1>Employee Management System</h1>
+        <h1>EMS</h1>
+        <h4>Employee Management System</h4>
       </div>
       <div style={{
       display:'flex',
