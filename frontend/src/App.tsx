@@ -121,6 +121,24 @@ async function handleSearch() {
   }
 }
 
+async function handleUpdateSearch() {
+  if(!formData.UpdateID){
+    alert("Enter the Search ID to Search");
+  }
+  else{
+    const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
+      params:{search:formData.UpdateID},
+    });
+    if(response.data.message!="Employee not found" && response.data.message!="Server error"){
+      SetupdateResult(response.data);
+      setupdatemode(true);
+    }
+    else{
+      alert(response.data.message);
+    }
+  }
+}
+
 async function handleDelete() {
   if(!formData.deleteID){
     alert("Enter the Delete ID to Delete");
@@ -499,7 +517,7 @@ async function handleUpdate() {
                     onChange={handlechange}
                     value={formData.UpdateID}
                   />
-                  <button onClick={handleSearch}>Search</button>
+                  <button onClick={handleUpdateSearch}>Search</button>
                 </div>
               ) : (
                 <div
