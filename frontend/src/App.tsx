@@ -76,6 +76,7 @@ async function handleSubmit() {
 
     });
     alert(response.data.message);
+    window.location.reload();
   }
 }
 
