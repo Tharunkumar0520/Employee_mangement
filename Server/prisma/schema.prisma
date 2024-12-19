@@ -15,6 +15,6 @@ model Employee {
   email         String   @unique
   phoneNumber   String
   department    String
-  dateOfJoining String
+  dateOfJoining DateTime
   role          String
 }

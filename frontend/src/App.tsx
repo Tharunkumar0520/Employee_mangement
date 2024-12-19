@@ -11,7 +11,7 @@ const App = () => {
     email: "",
     phoneNumber: "",
     department: "",
-    dateOfJoining: "",
+    dateOfJoining: new Date(),
     role: "",
     Searchid: "",
     UpdateID: "",
@@ -54,7 +54,7 @@ async function handleUpdateChange(e: React.ChangeEvent<HTMLInputElement | HTMLSe
 async function handlechange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
   const {name,value} = e.target;
   if (name === "dateOfJoining") {
-    setformData({...formData,[name]:value});
+    setformData({...formData,[name]:new Date(value)});
   } else {
     setformData({...formData,[name]:value});
   }
