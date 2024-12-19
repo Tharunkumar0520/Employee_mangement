@@ -110,7 +110,7 @@ async function handleSearch() {
   }
   else{
     const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
-      params:{search:formData.UpdateID},
+      params:{search:formData.Searchid},
     });
     if(response.data.message!="Employee not found" && response.data.message!="Server error"){
       setSearchResult(response.data);
