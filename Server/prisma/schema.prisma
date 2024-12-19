@@ -15,6 +15,6 @@ model Employee {
   email         String   @unique
   phoneNumber   String
   department    String
-  dateOfJoining DateTime
+  dateOfJoining DateTime @db.Timestamp(6)
   role          String
 }

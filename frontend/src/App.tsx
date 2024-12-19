@@ -34,7 +34,7 @@ const App = () => {
     email: "",
     phoneNumber: "",
     department: "",
-    dateOfJoining: "",
+    dateOfJoining: new Date(),
     role: "",
   });
 
@@ -45,7 +45,7 @@ const App = () => {
 async function handleUpdateChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
   const {name,value} = e.target;
   if (name === "dateOfJoining") {
-    SetupdateResult({...updateResult,[name]:value});
+    SetupdateResult({...updateResult,[name]:new Date(value)});
   } else {
     SetupdateResult({...updateResult,[name]:value});
   }
@@ -657,7 +657,7 @@ async function handleUpdate() {
                           type="date"
                           name="dateOfJoining"
                           max={today}
-                          value={updateResult.dateOfJoining.split("T")[0]}
+                          value={updateResult.dateOfJoining.toString().split("T")[0]}
                           onChange={handleUpdateChange}
                           required
                         />
