@@ -105,31 +105,18 @@ async function handleSubmit() {
 }
 
 async function handleSearch() {
-  if(!formData.Searchid && !formData.UpdateID){
+  if(!formData.Searchid){
     alert("Enter the Search ID to Search");
   }
   else{
-    if(!formData.Searchid){
-      const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
-        params:{search:formData.UpdateID},
-      });
-      if(response.data.message!="Employee not found" && response.data.message!="Server error"){
-        setSearchResult(response.data);
-      }
-      else{
-        alert(response.data.message);
-      }
-    }else{
-      const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
-        params:{search:formData.Searchid},
-      });
-      if(response.data.message!="Employee not found" && response.data.message!="Server error"){
-          SetupdateResult(response.data);
-          setupdatemode(true);
-      }
-      else{
-        alert(response.data.message);
-      }
+    const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
+      params:{search:formData.UpdateID},
+    });
+    if(response.data.message!="Employee not found" && response.data.message!="Server error"){
+      setSearchResult(response.data);
+    }
+    else{
+      alert(response.data.message);
     }
   }
 }
