@@ -61,9 +61,12 @@ async function handleSubmit() {
   else if(!formData.role){
     alert("Enter the Role feild")
   }
-  else if(formData.phoneNumber.length>10){
+  else if(formData.phoneNumber.length>10 || formData.phoneNumber.length<10){
     alert("Please Enter 10 Digit Phone Number");
   }
+  else if (!formData.email.includes("@") || !formData.email.includes(".")) {
+    alert("Please Enter a Valid Email Address");
+  }  
   else{
     const response=await axios.post("https://employee-mangement-f39u.onrender.com/push-user",{
       name:formData.name,
