@@ -4,15 +4,17 @@ import { useState} from "react";
 const App = () => {
   const [activeTab, setActiveTab] = useState("add");
   const today=new Date().toISOString().split('T')[0];
+  const [updatemode,setupdatemode] = useState(false);
   const [formData, setformData] = useState({
     name: "",
     employeeId: "",
     email: "",
     phoneNumber: "",
     department: "",
-    dateOfJoining: new Date(),
+    dateOfJoining: "",
     role: "",
     Searchid: "",
+    UpdateID: "",
     deleteID:"",
   });
 
@@ -26,14 +28,33 @@ const App = () => {
     role: "",
   });
 
-  const handleTabChange = (tab: "add" | "search" | "show") => {
+  const [updateResult, SetupdateResult] = useState({
+    name: "",
+    employeeId: "",
+    email: "",
+    phoneNumber: "",
+    department: "",
+    dateOfJoining: "",
+    role: "",
+  });
+
+  const handleTabChange = (tab: "add" | "search" | "delete" | "update") => {
     setActiveTab(tab);
 };
+
+async function handleUpdateChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  const {name,value} = e.target;
+  if (name === "dateOfJoining") {
+    SetupdateResult({...updateResult,[name]:value});
+  } else {
+    SetupdateResult({...updateResult,[name]:value});
+  }
+}
 
 async function handlechange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
   const {name,value} = e.target;
   if (name === "dateOfJoining") {
-    setformData({...formData,[name]:new Date(value)});
+    setformData({...formData,[name]:value});
   } else {
     setformData({...formData,[name]:value});
   }
@@ -84,15 +105,26 @@ async function handleSubmit() {
 }
 
 async function handleSearch() {
-  if(!formData.Searchid){
+  if(!formData.Searchid && !formData.UpdateID){
     alert("Enter the Search ID to Search");
   }
   else{
-    const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
-      params:{search:formData.Searchid},
-    });
+    let response;
+    if(!formData.Searchid){
+      response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
+        params:{search:formData.UpdateID},
+      });
+    }else{
+      response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
+        params:{search:formData.Searchid},
+      });
+    }
     if(response.data.message!="Employee not found" && response.data.message!="Server error"){
-      setSearchResult(response.data);
+      if(activeTab=="show") setSearchResult(response.data);
+      if(activeTab=="update"){
+        SetupdateResult(response.data);
+        setupdatemode(true);
+      }
     }
     else{
       alert(response.data.message);
@@ -109,6 +141,50 @@ async function handleDelete() {
       params:{delid:formData.deleteID},
     })
     alert(response.data.message);
+  }
+}
+
+async function handleUpdate() {
+  if(!updateResult.name){
+    alert("Enter the name feild")
+  }
+  else if(!updateResult.employeeId){
+    alert("Enter the Employee Id feild")
+  }
+  else if(!updateResult.email){
+    alert("Enter the Email feild")
+  }
+  else if(!updateResult.phoneNumber){
+    alert("Enter the Phone Number feild")
+  }
+  else if(!updateResult.department){
+    alert("Enter the Department feild")
+  }
+  else if(!updateResult.dateOfJoining){
+    alert("Enter the Date Of Joining feild")
+  }
+  else if(!updateResult.role){
+    alert("Enter the Role feild")
+  }
+  else if(updateResult.phoneNumber.length>10 || updateResult.phoneNumber.length<10){
+    alert("Please Enter 10 Digit Phone Number");
+  }
+  else if (!updateResult.email.includes("@") || !updateResult.email.includes(".")) {
+    alert("Please Enter a Valid Email Address");
+  }  
+  else{
+    const response=await axios.post("http://localhost:3000/update-user",{
+      name:updateResult.name,
+      employeeId:updateResult.employeeId,
+      email:updateResult.email,
+      phoneNumber:updateResult.phoneNumber,
+      department:updateResult.department,
+      dateOfJoining:updateResult.dateOfJoining,
+      role:updateResult.role,
+
+    });
+    alert(response.data.message);
+    window.location.reload();
   }
 }
 
@@ -162,7 +238,18 @@ async function handleDelete() {
           borderRadius: "5px",
           cursor: "pointer",
         }}
-        onClick={() => handleTabChange("show")}>Delete Employees</button>
+        onClick={() => handleTabChange("delete")}>Delete Employees</button>
+        <button 
+        style={{
+          backgroundColor: "#DC3545",
+          color: "white",
+          padding: "10px 20px",
+          fontSize: "16px",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+        onClick={() => handleTabChange("update")}>Edit Employees</button>
       </div>
 
       {activeTab === "add" && (
@@ -376,7 +463,7 @@ async function handleDelete() {
         </div>
       )}
 
-      {activeTab === "show" && (
+      {activeTab === "delete" && (
         <div style={{
           display:'flex',
           flexDirection:'row',
@@ -397,6 +484,211 @@ async function handleDelete() {
             />
             <button onClick={handleDelete}>Delete</button>
           </div>
+      )}
+
+      {activeTab === "update" && (
+            <div>
+              {!updatemode ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                  }}
+                >
+                  <input
+                    style={{
+                      color: "white",
+                      padding: "10px 20px",
+                      fontSize: "16px",
+                      border: "none",
+                      borderRadius: "10px",
+                    }}
+                    name="UpdateID"
+                    type="text"
+                    placeholder="Search by Employee ID"
+                    onChange={handlechange}
+                    value={formData.UpdateID}
+                  />
+                  <button onClick={handleSearch}>Search</button>
+                </div>
+              ) : (
+                <div
+                style={{
+                  display:'flex',
+                  flexDirection:"column",
+                  justifyContent: "space-between",
+                  gap:'25px'
+                }}
+                >
+                  <div style={{
+                      display:'flex',
+                      flexDirection:'row',
+                      justifyContent: "space-between",
+                      gap:'10px'
+                    }}>
+                        <strong>NAME  </strong>
+                        <input
+                        style={{
+                          color: "white",
+                          padding: "10px 20px",
+                          fontSize: "16px",
+                          border: "none",
+                          borderRadius: "10px",
+                        }}
+                          type="text"
+                          name="name"
+                          placeholder="Name"
+                          onChange={handleUpdateChange}
+                          value={updateResult.name}
+                          required
+                        />
+                      </div>
+                      <div style={{
+                      display:'flex',
+                      flexDirection:'row',
+                      justifyContent: "space-between",
+                      gap:'10px'
+                    }}>
+                        <strong>EMPLOYEE ID  </strong>
+                        <input
+                          style={{
+                            color: "white",
+                            padding: "10px 20px",
+                            fontSize: "16px",
+                            border: "none",
+                            borderRadius: "10px",
+                          }}
+                          type="text"
+                          name="employeeId"
+                          placeholder="Employee ID"
+                          onChange={handleUpdateChange}
+                          value={updateResult.employeeId}
+                          required
+                        />
+                      </div>
+                      <div style={{
+                      display:'flex',
+                      flexDirection:'row',
+                      justifyContent: "space-between",
+                      gap:'10px'
+                    }}>
+                        <strong>EMAIL  </strong>
+                        <input
+                          style={{
+                            color: "white",
+                            padding: "10px 20px",
+                            fontSize: "16px",
+                            border: "none",
+                            borderRadius: "10px",
+                          }}
+                          type="email"
+                          name="email"
+                          placeholder="Email"
+                          onChange={handleUpdateChange}
+                          value={updateResult.email}
+                          required
+                        />
+                      </div>
+                      <div style={{
+                      display:'flex',
+                      flexDirection:'row',
+                      justifyContent: "space-between",
+                      gap:'10px'
+                    }}>
+                        <strong>PHONE NUMBER  </strong>
+                        <input
+                          style={{
+                            color: "white",
+                            padding: "10px 20px",
+                            fontSize: "16px",
+                            border: "none",
+                            borderRadius: "10px",
+                          }}
+                          type="number"
+                          name="phoneNumber"
+                          placeholder="Phone Number"
+                          onChange={handleUpdateChange}
+                          value={updateResult.phoneNumber}
+                          required
+                        />
+                      </div>
+                      <div style={{
+                      display:'flex',
+                      flexDirection:'row',
+                      justifyContent: "space-between",
+                      gap:'10px'
+                    }}>
+                        <strong>DEPARTMENT  </strong>
+                        <select
+                          style={{
+                            color: "white",
+                            padding: "10px 40px",
+                            fontSize: "16px",
+                            border: "none",
+                            borderRadius: "10px",
+                          }}
+                          name="department"
+                          onChange={handleUpdateChange}
+                          value={updateResult.department}
+                          required
+                        >
+                          <option value="">Select Department</option>
+                          <option value="HR">HR</option>
+                          <option value="Engineering">Engineering</option>
+                          <option value="Marketing">Marketing</option>
+                        </select>
+                      </div>
+                      <div style={{
+                      display:'flex',
+                      flexDirection:'row',
+                      justifyContent: "space-between",
+                      gap:'10px'
+                    }}>
+                        <strong>DATE OF JOINING  </strong>
+                        <input
+                          style={{
+                            color: "white",
+                            padding: "10px 50px",
+                            fontSize: "16px",
+                            border: "none",
+                            borderRadius: "10px",
+                          }}
+                          type="date"
+                          name="dateOfJoining"
+                          max={today}
+                          value={updateResult.dateOfJoining.split("T")[0]}
+                          onChange={handleUpdateChange}
+                          required
+                        />
+                      </div>
+                      <div style={{
+                      display:'flex',
+                      flexDirection:'row',
+                      justifyContent: "space-between",
+                      gap:'10px'
+                    }}>
+                        <strong>ROLE  </strong>
+                        <input
+                          style={{
+                            color: "white",
+                            padding: "10px 20px",
+                            fontSize: "16px",
+                            border: "none",
+                            borderRadius: "10px",
+                          }}
+                          type="text"
+                          name="role"
+                          placeholder="Role"
+                          onChange={handleUpdateChange}
+                          value={updateResult.role}
+                          required
+                        />
+                      </div>
+                      <button onClick={handleUpdate}>Update</button>
+              </div>
+              )}
+            </div>
       )}
     </div>
   );
