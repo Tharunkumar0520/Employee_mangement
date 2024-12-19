@@ -252,7 +252,7 @@ async function handleDelete() {
                 border: "none",
                 borderRadius: "10px",
               }}
-              type="text"
+              type="number"
               name="phoneNumber"
               placeholder="Phone Number"
               onChange={handlechange}
