@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState} from "react";
+import {API} from "./../configs";
 
 const App = () => {
   const [activeTab, setActiveTab] = useState("add");
@@ -89,7 +90,7 @@ async function handleSubmit() {
     alert("Please Enter a Valid Email Address");
   }  
   else{
-    const response=await axios.post("https://employee-mangement-f39u.onrender.com/push-user",{
+    const response=await axios.post(`${API}/push-user`,{
       name:formData.name,
       employeeId:formData.employeeId,
       email:formData.email,
@@ -100,7 +101,7 @@ async function handleSubmit() {
 
     });
     alert(response.data.message);
-    window.location.reload();
+    // window.location.reload();
   }
 }
 
@@ -109,7 +110,7 @@ async function handleSearch() {
     alert("Enter the Search ID to Search");
   }
   else{
-    const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
+    const response=await axios.get(`${API}/get-user`,{
       params:{search:formData.Searchid},
     });
     if(response.data.message!="Employee not found" && response.data.message!="Server error"){
@@ -126,7 +127,7 @@ async function handleUpdateSearch() {
     alert("Enter the Search ID to Search");
   }
   else{
-    const response=await axios.get("https://employee-mangement-f39u.onrender.com/get-user",{
+    const response=await axios.get(`${API}/get-user`,{
       params:{search:formData.UpdateID},
     });
     if(response.data.message!="Employee not found" && response.data.message!="Server error"){
@@ -144,7 +145,7 @@ async function handleDelete() {
     alert("Enter the Delete ID to Delete");
   }
   else{
-    const response = await axios.delete("https://employee-mangement-f39u.onrender.com/del-user",{
+    const response = await axios.delete(`${API}/del-user`,{
       params:{delid:formData.deleteID},
     })
     alert(response.data.message);
@@ -180,7 +181,7 @@ async function handleUpdate() {
     alert("Please Enter a Valid Email Address");
   }  
   else{
-    const response=await axios.post("https://employee-mangement-f39u.onrender.com/update-user",{
+    const response=await axios.post(`${API}/update-user`,{
       id:formData.UpdateID,
       name:updateResult.name,
       employeeId:updateResult.employeeId,

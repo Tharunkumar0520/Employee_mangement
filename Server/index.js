@@ -30,6 +30,14 @@ app.post('/push-user',async (req,res)=>{
         })
         res.json({message:'User Pushed'});
     }catch(error){
+        if(error.code=="P2002" && error.message.includes("email")){
+            res.json({message:"Email already exists"})
+            return;
+        }
+        if(error.code=="P2002" && error.message.includes("employeeId")){
+            res.json({message:"Employee Id already exists"})
+            return;
+        }
         res.json({message:'Error Occured'});
     }
 })
