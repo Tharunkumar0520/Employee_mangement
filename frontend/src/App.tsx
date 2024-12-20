@@ -180,7 +180,8 @@ async function handleUpdate() {
     alert("Please Enter a Valid Email Address");
   }  
   else{
-    const response=await axios.post("http://localhost:3000/update-user",{
+    const response=await axios.post("https://employee-mangement-f39u.onrender.com/update-user",{
+      id:formData.UpdateID,
       name:updateResult.name,
       employeeId:updateResult.employeeId,
       email:updateResult.email,

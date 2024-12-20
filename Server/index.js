@@ -65,6 +65,30 @@ app.delete('/del-user',async (req,res)=>{
 catch(err){
     res.json({message:"error during deletion"})
 }
-})
+});
+
+app.post('/update-user',async (req,res)=>{
+    try{
+        const id = req.query.id;
+        const data = await client.Employee.update({
+            where :{
+                employeeId:id,
+            },
+            data:{
+                name:req.body.name,
+                email:req.body.email,
+                employeeId:req.body.employeeId,
+                phoneNumber:req.body.phoneNumber,
+                department:req.body.department,
+                role:req.body.role,
+                dateOfJoining:req.body.dateOfJoining,
+            }
+        });
+        res.json({message:`User ${id} Updated Successfully`});
+    }
+    catch(err){
+        res.json({message:"Error during Updation"})
+    }
+});
 
 app.listen(port , () => console.log("Listening 3000"));
