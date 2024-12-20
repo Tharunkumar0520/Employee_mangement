@@ -34,7 +34,7 @@ const App = () => {
     email: "",
     phoneNumber: "",
     department: "",
-    dateOfJoining: new Date(),
+    dateOfJoining: "",
     role: "",
   });
 
@@ -45,7 +45,7 @@ const App = () => {
 async function handleUpdateChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
   const {name,value} = e.target;
   if (name === "dateOfJoining") {
-    SetupdateResult({...updateResult,[name]:new Date(value)});
+    SetupdateResult({...updateResult,[name]:value});
   } else {
     SetupdateResult({...updateResult,[name]:value});
   }
@@ -248,7 +248,7 @@ async function handleUpdate() {
         onClick={() => handleTabChange("delete")}>Delete Employees</button>
         <button 
         style={{
-          backgroundColor: "#DC3545",
+          backgroundColor: "#FFC145",
           color: "white",
           padding: "10px 20px",
           fontSize: "16px",
