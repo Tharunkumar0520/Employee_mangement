@@ -69,8 +69,8 @@ catch(err){
 
 app.post('/update-user',async (req,res)=>{
     try{
-        const id = req.query.id;
-        const data = await client.Employee.update({
+        const id = req.body.id;
+        const data = await client.employee.update({
             where :{
                 employeeId:id,
             },

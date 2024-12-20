@@ -192,7 +192,8 @@ async function handleUpdate() {
 
     });
     alert(response.data.message);
-    window.location.reload();
+    setupdatemode(false);
+    setformData({...formData,UpdateID:""});
   }
 }
 
